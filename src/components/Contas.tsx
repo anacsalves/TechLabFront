@@ -10,7 +10,17 @@ export default function Contas() {
   const [mensagem, setMensagem] = useState('');
   const [contas, setContas] = useState<any[]>([]);
 
-  const API_URL = 'http://localhost:3001/contas'; 
+  const API_URL = 'http://localhost:3001/contas';
+   const handleEdit = (id: number) => {
+    alert(`Editar conta com ID: ${id}`);
+  };
+
+  const handleDelete = (id: number) => {
+    const confirmar = confirm("Tem certeza que deseja excluir essa conta?");
+    if (confirmar) {
+      setContas(contas.filter((conta) => conta.id !== id));
+    }
+  };
 
   const cadastrarConta = async () => {
     const resposta = await fetch(API_URL, {
@@ -52,17 +62,22 @@ export default function Contas() {
 
   return (
     <>
-      <div className="flex flex-col gap-4 p-4">
-        <div className="flex flex-wrap gap-4">
+      <div className="flex flex-col gap-4 p-4 bg-gray-300">
+        <h2 className="text-4xl font-bold">Minhas contas</h2>
+
+        <div className="flex flex-wrap gap-2">
           {contas.length === 0 ? (
             <p>Não há contas cadastradas.</p>
           ) : (
             contas.map((conta) => (
               <CardConta
-                key={conta.id}
+                 key={conta.id}
+                id={conta.id}
                 nome={conta.nome}
                 tipo={conta.tipo}
                 saldo={conta.saldo}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
               />
             ))
           )}
